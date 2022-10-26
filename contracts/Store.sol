@@ -4,6 +4,8 @@ pragma solidity 0.8.7;
 import {Ownable} from "./Ownable.sol";
 import "./Errors.sol";
 
+import {Pagination} from "./Utils.sol";
+
 contract Store is Ownable {
     struct Product {
         string serial;
@@ -75,9 +77,11 @@ contract Store is Ownable {
     event ProductBought(uint256 indexed productId, address buyer);
     event ProductReturned(uint256 indexed productId, address buyer);
 
-    function _swapProductKeys(uint256 _productKey1, uint256 _productKey2) private {
+    function _swapProductKeys(uint256 _productKey1, uint256 _productKey2)
+        private
+    {
         uint256 productLocation = productKeysLocation[_productKey1];
-        uint256 swapProductLocation = productKeysLocation[_productKey2];        
+        uint256 swapProductLocation = productKeysLocation[_productKey2];
         productKeys[productLocation] = _productKey2;
         productKeysLocation[_productKey2] = productLocation;
         productKeys[swapProductLocation] = _productKey1;
@@ -181,33 +185,47 @@ contract Store is Ownable {
         emit ProductReturned(_productId, msg.sender);
     }
 
-    function getAvailableProducts(uint32 _numberOfProducts, uint32 _offset)
+    function getAvailableProducts(uint32 _pageSize, uint32 _pageNumber)
         external
         view
-        returns (uint256[] memory, uint256)
+        returns (Product[] memory, uint256)
     {
-        if (_numberOfProducts == 0) revert NumberOfProductsIsZero();
-        if (_offset >= availableProductsCount) revert OffsetMoreThanProducts();
-        uint256 end = _offset + _numberOfProducts < availableProductsCount
-            ? _offset + _numberOfProducts
-            : availableProductsCount;
-        uint256[] memory productsArr = new uint256[](_numberOfProducts);
-        for (uint256 i = _offset; i < end; i++) {
-            productsArr[i - _offset] = productKeys[i];
+        (uint256 start, uint256 end, uint256 pagesCount) = Pagination
+            .getPagination(availableProductsCount, _pageSize, _pageNumber);
+        Product[] memory availableProducts = new Product[](end - start);
+        for (uint256 i = start; i < end; i++) {
+            availableProducts[i - start] = products[productKeys[i]];
         }
-        return (productsArr, end - _offset);
+        return (availableProducts, pagesCount);
     }
 
     function getProductsInfo(uint256 _productId)
         external
         view
+        productIdExist(_productId)
         returns (Product memory)
     {
         return products[_productId];
     }
 
-    function getProductBuyers(uint256 _productId) external view returns (address[] memory){
-        return clientShopped[_productId];
+    function getProductBuyers(
+        uint256 _productId,
+        uint256 _pageSize,
+        uint256 _pageNumber
+    )
+        external
+        view
+        productIdExist(_productId)
+        returns (address[] memory, uint256)
+    {
+        address[] storage productBuyers = clientShopped[_productId];
+        (uint256 start, uint256 end, uint256 pagesCount) = Pagination
+            .getPagination(productBuyers.length, _pageSize, _pageNumber);
+        address[] memory buyers = new address[](end - start);
+        for (uint256 i = start; i < end; i++) {
+            buyers[i - start] = productBuyers[i];
+        }
+        return (buyers, pagesCount);
     }
 
     function getBalance() private view returns (uint256) {

@@ -24,3 +24,5 @@ error WithdrawExecuted();
 error LastWithdrawNotExecuted();
 error WithdrawCancelled();
 error WithdrawNotCancelled();
+
+error PageOutOfRange();
