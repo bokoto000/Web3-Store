@@ -1,0 +1,69 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "NotInvokedByOwner",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address payable",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"Ownable.sol": "Ownable"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"Ownable.sol": {
+			"keccak256": "0xdf0c87a0528d5a2e0e7f7a8c926dbf426f135f76349bff7d9062d61c0b3ccbf3",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://3a44661081c161f03b953aa8a271c278b571a7d47f883f87ddb1b2cb514706fb",
+				"dweb:/ipfs/QmeFLSc6HmqMQFPyfV2jiCsj7ZcKjymvZ6cQ5ex2XHRXVa"
+			]
+		}
+	},
+	"version": 1
+}

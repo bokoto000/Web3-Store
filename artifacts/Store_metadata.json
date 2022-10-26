@@ -1,0 +1,424 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "DescriptionIsEmpty",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "LastWithdrawNotExecuted",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NameIsEmpty",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NoQuantityLeft",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NotEnoughETH",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NotInvokedByOwner",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NumberOfProductsIsZero",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "OffsetMoreThanProducts",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ProductBoughtBefore",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "productId",
+						"type": "uint256"
+					}
+				],
+				"name": "ProductDoesntExist",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ProductIsNotOwned",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ProductIsOwned",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "serial",
+						"type": "string"
+					}
+				],
+				"name": "ProductSerialExist",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ReturnTimeExpired",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "SerialIsEmpty",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "WithdrawCancelled",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "WithdrawExecuted",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "WithdrawalTooSoon",
+				"type": "error"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "productId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "buyer",
+						"type": "address"
+					}
+				],
+				"name": "ProductBought",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "productId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "buyer",
+						"type": "address"
+					}
+				],
+				"name": "ProductReturned",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_serial",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_description",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_price",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_quantity",
+						"type": "uint256"
+					}
+				],
+				"name": "addProduct",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_productId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_quantity",
+						"type": "uint256"
+					}
+				],
+				"name": "addQuantity",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint32",
+						"name": "_productId",
+						"type": "uint32"
+					}
+				],
+				"name": "buyProduct",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint32",
+						"name": "_numberOfProducts",
+						"type": "uint32"
+					},
+					{
+						"internalType": "uint32",
+						"name": "_offset",
+						"type": "uint32"
+					}
+				],
+				"name": "getAvailableProducts",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_productId",
+						"type": "uint256"
+					}
+				],
+				"name": "getProductBuyers",
+				"outputs": [
+					{
+						"internalType": "address[]",
+						"name": "",
+						"type": "address[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_productId",
+						"type": "uint256"
+					}
+				],
+				"name": "getProductsInfo",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "serial",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "description",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "price",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "quantity",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct Store.Product",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address payable",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint32",
+						"name": "_productId",
+						"type": "uint32"
+					}
+				],
+				"name": "returnProduct",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "withdrawCancel",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "withdrawExecute",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					}
+				],
+				"name": "withdrawQueue",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"Store.sol": "Store"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"Errors.sol": {
+			"keccak256": "0x8cdc9c32095b0da87c1257c0ad76fabfacc18f2337cf187e33da54c338774e6b",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://6d7d0f4272b4232cc8f6f84fa761a249cdd50e84c29c16aa2134538134338a40",
+				"dweb:/ipfs/QmPuEePQn52bob3yC1RvzKervjXkQxm2rDGNqtnvM3z2VT"
+			]
+		},
+		"Ownable.sol": {
+			"keccak256": "0xdf0c87a0528d5a2e0e7f7a8c926dbf426f135f76349bff7d9062d61c0b3ccbf3",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://3a44661081c161f03b953aa8a271c278b571a7d47f883f87ddb1b2cb514706fb",
+				"dweb:/ipfs/QmeFLSc6HmqMQFPyfV2jiCsj7ZcKjymvZ6cQ5ex2XHRXVa"
+			]
+		},
+		"Store.sol": {
+			"keccak256": "0x03594f180275ab9ac5e23b8dbbe5ed1722b78d13487507b1f9a44c39cfc11c63",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://29da21844c98c4f90f1024b1a31042df6e5e5c7c7010f6ac36228765599f4cdd",
+				"dweb:/ipfs/Qme6v6udkDJZBHYhgqxrRez1hGmzPGf74aeiWtLDHCcCAY"
+			]
+		}
+	},
+	"version": 1
+}
