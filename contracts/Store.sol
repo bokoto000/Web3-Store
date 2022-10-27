@@ -11,25 +11,25 @@ contract Store is Ownable {
         string serial;
         string name;
         string description;
-        uint256 price;
-        uint256 quantity;
+        uint32 price;
+        uint32 quantity;
     }
 
-    mapping(uint256 => Product) private products;
+    mapping(uint32 => Product) private products;
     mapping(string => bool) private insertedProducts;
-    uint256[] private productKeys;
-    uint256[] private productKeysLocation;
-    uint256 private availableProductsCount;
+    uint32[] private productKeys;
+    uint32[] private productKeysLocation;
+    uint32 private availableProductsCount;
 
-    mapping(uint256 => address[]) private clientShopped;
-    mapping(uint256 => mapping(address => bool)) private insertedClientShopped;
+    mapping(uint32 => address[]) private clientShopped;
+    mapping(uint32 => mapping(address => bool)) private insertedClientShopped;
 
     struct OwnedInfo {
         bool owned;
         uint256 blockNumber;
     }
-    mapping(address => mapping(uint256 => OwnedInfo)) private ownerOf;
-    uint256 constant ReturnWindow = 100;
+    mapping(address => mapping(uint32 => OwnedInfo)) private ownerOf;
+    uint32 constant ReturnWindow = 100;
 
     struct WithdrawTransaction {
         uint256 amount;
@@ -39,7 +39,7 @@ contract Store is Ownable {
     }
 
     WithdrawTransaction[] withdrawals;
-    uint256 constant withdrawalWindow = 200;
+    uint32 constant withdrawalWindow = 200;
 
     constructor() {
         withdrawals.push(WithdrawTransaction(0, 0, true, false));
@@ -58,44 +58,44 @@ contract Store is Ownable {
         _;
     }
 
-    modifier productIdExist(uint256 _productId) {
+    modifier productIdExist(uint32 _productId) {
         if (_productId >= productKeys.length)
             revert ProductDoesntExist(_productId);
         _;
     }
 
-    modifier isOwnerOf(uint256 _productId) {
+    modifier isOwnerOf(uint32 _productId) {
         if (!ownerOf[msg.sender][_productId].owned) revert ProductIsNotOwned();
         _;
     }
 
-    modifier isNotOwnerOf(uint256 _productId) {
+    modifier isNotOwnerOf(uint32 _productId) {
         if (ownerOf[msg.sender][_productId].owned) revert ProductIsOwned();
         _;
     }
 
-    event ProductBought(uint256 indexed productId, address buyer);
-    event ProductReturned(uint256 indexed productId, address buyer);
+    event ProductBought(uint32 indexed productId, address buyer);
+    event ProductReturned(uint32 indexed productId, address buyer);
 
-    function _swapProductKeys(uint256 _productKey1, uint256 _productKey2)
+    function _swapProductKeys(uint32 _productKey1, uint32 _productKey2)
         private
     {
-        uint256 productLocation = productKeysLocation[_productKey1];
-        uint256 swapProductLocation = productKeysLocation[_productKey2];
+        uint32 productLocation = productKeysLocation[_productKey1];
+        uint32 swapProductLocation = productKeysLocation[_productKey2];
         productKeys[productLocation] = _productKey2;
         productKeysLocation[_productKey2] = productLocation;
         productKeys[swapProductLocation] = _productKey1;
         productKeysLocation[_productKey1] = swapProductLocation;
     }
 
-    function _makeProductUnavailable(uint256 _productId) private {
-        uint256 swapProduct = productKeys[availableProductsCount - 1];
+    function _makeProductUnavailable(uint32 _productId) private {
+        uint32 swapProduct = productKeys[availableProductsCount - 1];
         _swapProductKeys(_productId, swapProduct);
         availableProductsCount--;
     }
 
-    function _makeProductAvailable(uint256 _productId) private {
-        uint256 swapProduct = productKeys[availableProductsCount];
+    function _makeProductAvailable(uint32 _productId) private {
+        uint32 swapProduct = productKeys[availableProductsCount];
         _swapProductKeys(_productId, swapProduct);
         availableProductsCount++;
     }
@@ -104,9 +104,9 @@ contract Store is Ownable {
         string calldata _serial,
         string calldata _name,
         string calldata _description,
-        uint256 _price,
-        uint256 _quantity
-    ) external onlyOwner productDoesntExist(_serial) returns (uint256) {
+        uint32 _price,
+        uint32 _quantity
+    ) external onlyOwner productDoesntExist(_serial) returns (uint32) {
         if (bytes(_serial).length == 0) revert SerialIsEmpty();
         if (bytes(_name).length == 0) revert NameIsEmpty();
         if (bytes(_description).length == 0) revert DescriptionIsEmpty();
@@ -119,18 +119,18 @@ contract Store is Ownable {
         );
         insertedProducts[_serial] = true;
 
-        uint256 newId = productKeys.length;
-        products[productKeys.length] = newProduct;
+        uint32 newId = uint32(productKeys.length);
+        products[newId] = newProduct;
         productKeys.push(newId);
         productKeysLocation.push(newId);
 
         if (_quantity > 0) {
             _makeProductAvailable(newId);
         }
-        return productKeys.length - 1;
+        return uint32(productKeys.length) - 1;
     }
 
-    function addQuantity(uint256 _productId, uint256 _quantity)
+    function addQuantity(uint32 _productId, uint32 _quantity)
         external
         onlyOwner
         productIdExist(_productId)
@@ -188,18 +188,18 @@ contract Store is Ownable {
     function getAvailableProducts(uint32 _pageSize, uint32 _pageNumber)
         external
         view
-        returns (Product[] memory, uint256)
+        returns (Product[] memory, uint32)
     {
-        (uint256 start, uint256 end, uint256 pagesCount) = Pagination
+        (uint32 start, uint32 end, uint32 pagesCount) = Pagination
             .getPagination(availableProductsCount, _pageSize, _pageNumber);
         Product[] memory availableProducts = new Product[](end - start);
-        for (uint256 i = start; i < end; i++) {
+        for (uint32 i = start; i < end; i++) {
             availableProducts[i - start] = products[productKeys[i]];
         }
         return (availableProducts, pagesCount);
     }
 
-    function getProductsInfo(uint256 _productId)
+    function getProductsInfo(uint32 _productId)
         external
         view
         productIdExist(_productId)
@@ -209,20 +209,24 @@ contract Store is Ownable {
     }
 
     function getProductBuyers(
-        uint256 _productId,
-        uint256 _pageSize,
-        uint256 _pageNumber
+        uint32 _productId,
+        uint32 _pageSize,
+        uint32 _pageNumber
     )
         external
         view
         productIdExist(_productId)
-        returns (address[] memory, uint256)
+        returns (address[] memory, uint32)
     {
         address[] storage productBuyers = clientShopped[_productId];
-        (uint256 start, uint256 end, uint256 pagesCount) = Pagination
-            .getPagination(productBuyers.length, _pageSize, _pageNumber);
+        (uint32 start, uint32 end, uint32 pagesCount) = Pagination
+            .getPagination(
+                uint32(productBuyers.length),
+                _pageSize,
+                _pageNumber
+            );
         address[] memory buyers = new address[](end - start);
-        for (uint256 i = start; i < end; i++) {
+        for (uint32 i = start; i < end; i++) {
             buyers[i - start] = productBuyers[i];
         }
         return (buyers, pagesCount);
