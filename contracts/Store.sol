@@ -100,6 +100,10 @@ contract Store is Ownable {
         availableProductsCount++;
     }
 
+    function getBalance() private view returns (uint256) {
+        return address(this).balance;
+    }
+
     function addProduct(
         string calldata _serial,
         string calldata _name,
@@ -135,9 +139,10 @@ contract Store is Ownable {
         onlyOwner
         productIdExist(_productId)
     {
+        if (_quantity == 0) revert QuantityIsZero();
         Product storage product = products[_productId];
         products[_productId].quantity += _quantity;
-        if (product.quantity > 0) _makeProductAvailable(_productId);
+        if (product.quantity == _quantity) _makeProductAvailable(_productId);
     }
 
     function buyProduct(uint32 _productId)
@@ -230,10 +235,6 @@ contract Store is Ownable {
             buyers[i - start] = productBuyers[i];
         }
         return (buyers, pagesCount);
-    }
-
-    function getBalance() private view returns (uint256) {
-        return address(this).balance;
     }
 
     function withdrawQueue(uint256 _amount) external onlyOwner {
